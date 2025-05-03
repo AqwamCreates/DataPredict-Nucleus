@@ -35,53 +35,53 @@ local DataPredictNucleusInstancesArray = {}
 local DataPredictNucleus = {}
 
 function DataPredictNucleus.new(propertyTable: {})
-	
+
 	local instanceId: any = propertyTable.instanceId
-	
+
 	local existingInstance = DataPredictNucleusInstancesArray[instanceId]
 
 	if existingInstance then return existingInstance end
-	
+
 	local address: string = propertyTable.address or defaultAddress
-	
+
 	local port: string = propertyTable.port or defaultPort
-	
+
 	local uuid: string = propertyTable.uuid
-	
+
 	local apiKey: string = propertyTable.apiKey
-	
+
 	local encryptionKey: string = propertyTable.encryptionKey
-	
+
 	local commandPayloadArrayKey: string = propertyTable.commandPayloadArrayKey or defaultCommandPayloadArrayKey
-	
+
 	local syncTime: number = propertyTable.syncTime or defaultSyncTime
-	
+
 	local numberOfSyncRetry: number = propertyTable.numberOfSyncRetry or defaultNumberOfSyncRetry
-	
+
 	local syncRetryDelay: number = propertyTable.syncRetryDelay or defaultSyncRetryDelay
-	
+
 	local commandPayloadArrayCacheDuration: number = propertyTable.commandPayloadArrayCacheDuration or defaultCommandPayloadArrayCacheDuration
-	
+
 	if (not encryptionKey) then warn("Without an encryption key, the data will not be encrypted. This means that the hackers can intercept the unencrypted data.") end
-	
+
 	local commandFunctionDictionary = {}
-	
+
 	local modelDataDictionary = {}
-	
+
 	local logArray = {}
 
 	local isSyncThreadRunning = false
-	
+
 	local NewDataPredictNucleusInstance
-	
+
 	local function destroy()
-		
+
 		isSyncThreadRunning = false
-		
+
 		table.clear(NewDataPredictNucleusInstance)
 
 		------------------------------------------------
-		
+
 		instanceId = nil
 
 		existingInstance = nil
@@ -93,7 +93,7 @@ function DataPredictNucleus.new(propertyTable: {})
 		apiKey = nil
 
 		encryptionKey = nil
-		
+
 		commandPayloadArrayKey = nil
 
 		syncTime = nil
@@ -101,7 +101,7 @@ function DataPredictNucleus.new(propertyTable: {})
 		numberOfSyncRetry = nil
 
 		syncRetryDelay = nil
-		
+
 		commandPayloadArrayCacheDuration = nil
 
 		commandFunctionDictionary = nil
@@ -109,268 +109,268 @@ function DataPredictNucleus.new(propertyTable: {})
 		modelDataDictionary = nil
 
 		logArray = nil
-		
+
 		------------------------------------------------
-		
+
 		NewDataPredictNucleusInstance = nil
-		
+
 	end
-	
+
 	local function addLog(logType, logMessage)
-		
+
 		if (not table.find(logTypeArray, logType)) then error("Invalid log type.") end
-		
+
 		local currentTime = os.time()
-		
+
 		local logInfoArray = {currentTime, logType, logMessage}
-		
+
 		table.insert(logArray, logInfoArray)
-		
+
 		local success, errorMessage = pcall(function() 
-			
+
 			local jobIdString = tostring(gameJobId)
-			
+
 			LogStore:SetAsync(jobIdString, logArray) 
-			
+
 		end)
-		
+
 		if (not success) then warn("Failed to save log to DataStore: " .. errorMessage) end
-		
+
 	end
-	
+
 	local function removeLog(position)
-		
+
 		table.remove(logArray, position)
-		
+
 	end
-	
+
 	local function getLogArray()
-		
+
 		return logArray
-		
+
 	end
-	
+
 	local function clearAllLogs()
-		
+
 		table.clear(logArray)
-		
+
 	end
-	
+
 	local function processCommandPayload(commandPayload)
-		
+
 		local command = commandPayload["command"]
-		
+
 		local valueDictionary = commandPayload["valueDictionary"]
-		
+
 		local commandFunction = commandFunctionDictionary[command]
-		
+
 		if (not commandFunction) then addLog("Error", "Command function for " .. command .. " does not exist.") return end
-		
+
 		local commandSuccess = pcall(commandFunction, valueDictionary)
-		
+
 		if (not commandSuccess) then addLog("Error", "Unable to run " .. command .. " command.") end
-		
+
 	end
-	
+
 	local function processCommandPayloadArray(commandPayloadArray)
-		
+
 		for _, commandPayload in ipairs(commandPayloadArray) do
-			
+
 			processCommandPayload(commandPayload)
-			
+
 		end
-		
+
 	end
-	
+
 	local function fetchCommandPayloadArray()
-		
+
 		local cachedResponseDictionary = CommandPayloadArrayStore:GetAsync(commandPayloadArrayKey)
-		
+
 		if (cachedResponseDictionary) then return cachedResponseDictionary end
-		
+
 		local url = "http://" .. address .. ":" .. port .. "/request-commands"
-		
+
 		local requestDictionary = {
-			
+
 			uuid = uuid,
 			apiKey = apiKey,
-			
+
 		}
-		
+
 		local requestBody = HttpService:JSONEncode(requestDictionary)
-		
+
 		for attempt = 1, numberOfSyncRetry, 1 do
-			
+
 			local responseSuccess, responseBody = pcall(function() return HttpService:PostAsync(url, requestBody, Enum.HttpContentType.ApplicationJson) end)
-			
+
 			if (responseSuccess) then
-				
+
 				local decodeSuccess, data = pcall(function() return HttpService:JSONDecode(responseBody) end)
 
 				if (decodeSuccess) then
-					
+
 					local commandPayloadArray = data.commandPayloadArray
-					
+
 					if (not commandPayloadArray) then return nil end
-					
+
 					CommandPayloadArrayStore:SetAsync(commandPayloadArrayKey, commandPayloadArray, commandPayloadArrayCacheDuration)
-					
+
 					return commandPayloadArray
-					
+
 				else
-					
+
 					addLog("Error", "Failed to decode API response using the \"fetchCommandPayloadArray\" function: " .. responseBody)
-					
+
 				end
-				
+
 			end
-			
+
 			addLog("Warning", "Sync attempt " .. attempt .. " failed. Retrying in " .. syncRetryDelay .. " seconds.")
-			
+
 			local currentSyncRetryDelay = syncRetryDelay ^ attempt -- Exponential backoff
-			
+
 			task.wait(currentSyncRetryDelay)
-			
+
 		end
-		
+
 		addLog("Warning", "Unable to fetch response from " .. url .. ".")
-		
+
 		return nil
-		
+
 	end
-	
+
 	local function startSync()
-		
+
 		if (isSyncThreadRunning) then error("Already syncing.") end
-		
+
 		isSyncThreadRunning = true
-		
+
 		task.spawn(function()
-			
+
 			while isSyncThreadRunning do
-				
+
 				local commandPayloadArray = fetchCommandPayloadArray()
-				
+
 				if commandPayloadArray then processCommandPayloadArray(commandPayloadArray) end
-				
+
 				task.wait(syncTime)
-				
+
 			end
-			
+
 		end)
-		
+
 	end
-	
+
 	local function stopSync()
-		
+
 		if (not isSyncThreadRunning) then error("Currently not syncing.") end
-		
+
 		isSyncThreadRunning = false
-		
+
 	end
-	
+
 	local function addCommand(commandName, functionToRun)
-		
+
 		if (type(commandName) ~= "string") then error("Command name is not a string.") return end
-		
+
 		commandFunctionDictionary[commandName] = functionToRun
-		
+
 	end
-	
+
 	local function removeCommand(commandName)
-		
+
 		if (type(commandName) ~= "string") then error("Command name is not a string.") return end
-		
+
 		commandFunctionDictionary[commandName] = nil
-		
+
 	end
-	
-	local function addModelData(modelName, ModelDictionary, modelParameterNames)
+
+	local function addModelData(modelName, ModelDictionary, modelParameterNameArray)
 
 		if (type(modelName) ~= "string") then error("Model name is not a string.") return end
-		
+
 		modelDataDictionary[modelName] = {
 
 			ModelDictionary = ModelDictionary or {}, 
-			
-			modelParameterNames = modelParameterNames or {}
-			
+
+			modelParameterNameArray = modelParameterNameArray or {}
+
 		}
-		
+
 	end
-	
+
 	local function removeModelData(modelName)
-		
+
 		modelDataDictionary[modelName] = nil
-		
+
 	end
-	
+
 	local function getModelData(modelName)
-		
+
 		return modelDataDictionary[modelName]
-		
+
 	end
-	
+
 	local function addModelToModelData(modelName, key, Model)
-		
+
 		local modelData = modelDataDictionary[modelName]
 
 		if (not modelData) then addLog("Error", modelName .. " data does not exist.") return end
-		
+
 		if (type(key) ~= "string") then addLog("Error", "Key is not a string.") return end
-		
+
 		local ModelDictionary = modelData.ModelDictionary
-		
+
 		if (ModelDictionary[key]) then addLog("Error", "Model already exist for key " .. key .. ".") return end
-		
+
 		ModelDictionary[key] = Model
 
 	end
-	
+
 	local function removeModelFromModelData(modelName, key)
 
 		local modelData = modelDataDictionary[modelName]
 
 		if (not modelData) then addLog("Error", modelName .. " data does not exist.") return end
-		
+
 		if (type(key) ~= "string") then addLog("Error", "Key is not a string.") return end
 
 		modelData.ModelDictionary[key] = nil
 
 	end
-	
+
 	local function applyFunctionToAllModelsInModelData(modelName, functionToApply)
-		
+
 		local modelData = modelDataDictionary[modelName]
 
 		if (not modelData) then addLog("Error", modelName .. " data does not exist.") return end
-		
+
 		local modelParameterNames = modelData.modelParameterNames
-		
+
 		for key, Model in pairs(modelData.ModelDictionary) do
-			
+
 			functionToApply(key, Model, modelParameterNames)
-			
+
 		end
-		
+
 	end
-	
+
 	local function getModelParameters(valueDictionary)
-		
+
 		local modelName = valueDictionary.modelName
-		
+
 		local keyArray = valueDictionary.keyArray
-		
+
 		local url = "http://" .. address .. ":" .. port
-		
-		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNames)
-			
+
+		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
+
 			if keyArray then
-				
+
 				if (not table.find(keyArray, key)) then return end
-				
+
 			end
-			
+
 			local ModelParameters = Model:getModelParameters()
 
 			local requestDictionary = {
@@ -381,7 +381,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 				ModelParameters = ModelParameters,
 
-				modelParameterNames = modelParameterNames
+				modelParameterNameArray = modelParameterNameArray
 
 			}
 
@@ -416,47 +416,47 @@ function DataPredictNucleus.new(propertyTable: {})
 				addLog("Error", "Failed to send model parameters " .. key .. "  to API using the \"getModelParameters\" command: " .. responseBody)
 
 			end
-			
+
 		end)
-		
+
 	end
-	
+
 	local function setModelParameters(valueDictionary)
-		
+
 		local modelName = valueDictionary.modelName
-		
+
 		local keyArray = valueDictionary.keyArray
-		
+
 		local ModelParameters = valueDictionary.ModelParameters
-		
+
 		if (not ModelParameters) then addLog("Error", modelName .. " model parameters does not exist when calling the \"setModelParameters\" command.")  return end
 
 		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNames)
-			
+
 			if (keyArray) then
 
 				if (not table.find(keyArray, key)) then return end
 
 			end
-			
+
 			local success = pcall(function()
-				
+
 				Model:setModelParameters(ModelParameters)
-				
+
 			end)
-			
+
 			if success then
-				
+
 				addLog("Normal", modelName .. " model parameters ".. key .. " has been replaced using the \"setModelParameters\" command.")
 
 			else
-				
+
 				addLog("Error", modelName .. " model parameters ".. key .. " has not been replaced using the \"setModelParameters\" command.")
-				
+
 			end
 
 		end)
-		
+
 	end
 
 	local function setParameters(valueDictionary)
@@ -478,7 +478,7 @@ function DataPredictNucleus.new(propertyTable: {})
 			end
 
 			local success = pcall(function()
-				
+
 				for key, value in pairs(Parameters) do Model[key] = value end
 
 			end)
@@ -496,15 +496,15 @@ function DataPredictNucleus.new(propertyTable: {})
 		end)
 
 	end
-	
+
 	local function train(valueDictionary)
 
 		local modelName = valueDictionary.modelName
-		
+
 		local keyArray = valueDictionary.keyArray
 
 		local featureMatrix = valueDictionary.featureMatrix
-		
+
 		local labelMatrix = valueDictionary.labelMatrix
 
 		if (not featureMatrix) then addLog("Error", modelName .. " feature matrix does not exist when calling the \"train\" command.") return end
@@ -512,7 +512,7 @@ function DataPredictNucleus.new(propertyTable: {})
 		if (not labelMatrix) then addLog("Error", modelName .. " label matrix does not exist when calling the \"train\" command.")  return end
 
 		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNames)
-			
+
 			if (keyArray) then
 
 				if (not table.find(keyArray, key)) then return end
@@ -538,23 +538,23 @@ function DataPredictNucleus.new(propertyTable: {})
 		end)
 
 	end
-	
+
 	local function predict(valueDictionary)
-		
+
 		local modelName = valueDictionary.modelName
-		
+
 		local keyArray = valueDictionary.keyArray
-		
+
 		local featureMatrix = valueDictionary.featureMatrix
-		
+
 		local returnOriginalOutput = valueDictionary.returnOriginalOutput
-		
+
 		if (not featureMatrix) then addLog("Error", modelName .. " feature matrix does not exist when calling the \"predict\" command.") return end
-		
+
 		local url = "http://" .. address .. ":" .. port
 
 		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNames)
-			
+
 			if (keyArray) then
 
 				if (not table.find(keyArray, key)) then return end
@@ -608,51 +608,51 @@ function DataPredictNucleus.new(propertyTable: {})
 		end)
 
 	end
-	
+
 	local function gradientDescent(valueDictionary)
-		
+
 		local modelName = valueDictionary.modelName
-		
+
 		local keyArray = valueDictionary.keyArray
 
 		local ModelParametersGradient = valueDictionary.ModelParametersGradient
 
 		if (not ModelParametersGradient) then addLog("Error", modelName .. " model parameters gradient does not exist when calling the \"gradientDescent\" command.")  return end
-		
+
 		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNames)
-			
+
 			if (keyArray) then
 
 				if (not table.find(keyArray, key)) then return end
 
 			end
-			
+
 			local success = pcall(function()
-				
+
 				Model:gradientDescent(ModelParametersGradient)
-				
+
 			end)
-			
+
 			if success then
-				
+
 				addLog("Normal", modelName .. " model parameters ".. key .. " has been updated using the \"gradientDescent\" command.")
-				
+
 			else
-				
+
 				addLog("Error", modelName .. " model parameters ".. key .. " has not been updated using the \"gradientDescent\" command.")
-				
+
 			end
 
 		end)
-		
+
 	end
-	
+
 	local function runCommand(valueDictionary)
 
 		local commandName = valueDictionary.commandName
-		
+
 		if (type(commandName) ~= "string") then error("Command name is not a string.") return end
-		
+
 		local commandFunction = commandFunctionDictionary[commandName]
 
 		if (not commandFunction) then addLog("Error", commandName .. " command does not exist.") return end
@@ -660,36 +660,36 @@ function DataPredictNucleus.new(propertyTable: {})
 		commandFunction(valueDictionary)
 
 	end
-	
+
 	game:BindToClose(function()
-		
+
 		isSyncThreadRunning = false
-		
+
 	end)
-	
+
 	commandFunctionDictionary["getModelParameters"] = getModelParameters
-	
+
 	commandFunctionDictionary["setModelParameters"] = setModelParameters
-	
+
 	commandFunctionDictionary["setParameters"] = setParameters
-	
+
 	commandFunctionDictionary["train"] = train
-	
+
 	commandFunctionDictionary["predict"] = predict
-	
+
 	commandFunctionDictionary["gradientDescent"] = gradientDescent
-	
+
 	commandFunctionDictionary["runCommand"] = runCommand
-	
+
 	NewDataPredictNucleusInstance = {
-		
+
 		destroy = destroy,
 
 		addLog = addLog,
 		removeLog = removeLog,
 		getLogArray = getLogArray,
 		clearAllLogs = clearAllLogs,
-		
+
 		addModelToModelData = addModelToModelData,
 		removeModelFromModelData = removeModelFromModelData,
 		applyFunctionToAllModelsInModelData = applyFunctionToAllModelsInModelData,
@@ -706,9 +706,9 @@ function DataPredictNucleus.new(propertyTable: {})
 		getModelData = getModelData,
 
 	}
-	
+
 	return NewDataPredictNucleusInstance
-	
+
 end
 
 return DataPredictNucleus
