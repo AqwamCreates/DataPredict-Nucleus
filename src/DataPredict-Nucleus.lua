@@ -189,76 +189,101 @@ function DataPredictNucleus.new(propertyTable: {})
 	end
 
 	local function fetchCommandPayloadArray()
-
 		local cachedCommandPayloadArray = CommandPayloadArrayStore:GetAsync(commandPayloadArrayKey)
-		
-		if (cachedCommandPayloadArray) then
+
+		if cachedCommandPayloadArray then
 			
 			local currentCacheIdentifier = cachedCommandPayloadArray.cacheIdentifier
 
-			if (currentCacheIdentifier ~= lastCacheIdentifier) then
-
+			if currentCacheIdentifier ~= lastCacheIdentifier then
+				
 				lastCacheIdentifier = currentCacheIdentifier
-
+				
 				return cachedCommandPayloadArray
-
+				
 			end
 			
 		end
 
 		local url = "http://" .. address .. ":" .. port .. "/request-commands"
-
-		local requestDictionary = {
-
-			uuid = uuid,
-			apiKey = apiKey,
-
-		}
-
+		local requestDictionary = { uuid = uuid, apiKey = apiKey }
 		local requestBody = HttpService:JSONEncode(requestDictionary)
 
 		for attempt = 1, numberOfSyncRetry, 1 do
+			
+			local responseSuccess, responseBody = pcall(function()
+				
+				return HttpService:PostAsync(url, requestBody, Enum.HttpContentType.ApplicationJson)
+				
+			end)
 
-			local responseSuccess, responseBody = pcall(function() return HttpService:PostAsync(url, requestBody, Enum.HttpContentType.ApplicationJson) end)
-
-			if (responseSuccess) then
-
-				local decodeSuccess, data = pcall(function() return HttpService:JSONDecode(responseBody) end)
-
-				if (decodeSuccess) then
+			if responseSuccess then
+				
+				local decodeSuccess, data = pcall(function()
 					
-					if (not data) then return nil end
+					return HttpService:JSONDecode(responseBody)
+					
+				end)
 
+				if decodeSuccess and data then
+					
 					local commandPayloadArray = data.commandPayloadArray
+					
+					if commandPayloadArray then
 
-					if (not commandPayloadArray) then return nil end
+						commandPayloadArray.cacheIdentifier = HttpService:GenerateGUID(false)
 
-					commandPayloadArray.cacheIdentifier = HttpService:GenerateGUID(false)
+						local success, err = pcall(function()
+							
+							CommandPayloadArrayStore:UpdateAsync(commandPayloadArrayKey, function(previousCommandPayLoadArray)
+								
+								if (not previousCommandPayLoadArray) or (previousCommandPayLoadArray.cacheIdentifier ~= commandPayloadArray.cacheIdentifier) then
+									
+									return commandPayloadArray  -- Apply the new data
+									
+								else
+									
+									return previousCommandPayLoadArray  -- Don't update if the cache is already fresh
+									
+								end
+								
+							end)
+							
+						end)
 
-					CommandPayloadArrayStore:SetAsync(commandPayloadArrayKey, commandPayloadArray, commandPayloadArrayCacheDuration)
+						if (not success) then
+							
+							addLog("Error", "Failed to update cache: " .. err)
+							
+						else
 
-					return commandPayloadArray
+							CommandPayloadArrayStore:SetAsync(commandPayloadArrayKey, commandPayloadArray, commandPayloadArrayCacheDuration)
+							
+						end
 
+						return commandPayloadArray
+						
+					end
+					
 				else
-
-					addLog("Error", "Failed to decode API response using the \"fetchCommandPayloadArray\" function: " .. responseBody)
-
+					
+					addLog("Error", "Failed to decode API response.")
+					
 				end
-
+				
 			end
 
 			addLog("Warning", "Sync attempt " .. attempt .. " failed. Retrying in " .. syncRetryDelay .. " seconds.")
-
+			
 			local currentSyncRetryDelay = syncRetryDelay ^ attempt -- Exponential backoff
-
+			
 			task.wait(currentSyncRetryDelay)
-
+			
 		end
 
 		addLog("Warning", "Unable to fetch response from " .. url .. ".")
-
+		
 		return nil
-
 	end
 
 	local function startSync()
