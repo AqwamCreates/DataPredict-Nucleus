@@ -71,6 +71,8 @@ function DataPredictNucleus.new(propertyTable: {})
 	local logArray = {}
 
 	local isSyncThreadRunning = false
+	
+	local lastCacheIdentifier = nil
 
 	local NewDataPredictNucleusInstance
 
@@ -109,6 +111,8 @@ function DataPredictNucleus.new(propertyTable: {})
 		modelDataDictionary = nil
 
 		logArray = nil
+		
+		lastCacheIdentifier = nil
 
 		------------------------------------------------
 
@@ -184,9 +188,21 @@ function DataPredictNucleus.new(propertyTable: {})
 
 	local function fetchCommandPayloadArray()
 
-		local cachedResponseDictionary = CommandPayloadArrayStore:GetAsync(commandPayloadArrayKey)
+		local cachedCommandPayloadArray = CommandPayloadArrayStore:GetAsync(commandPayloadArrayKey)
+		
+		if (cachedCommandPayloadArray) then
+			
+			local currentCacheIdentifier = cachedCommandPayloadArray.cacheIdentifier
 
-		if (cachedResponseDictionary) then return cachedResponseDictionary end
+			if (currentCacheIdentifier ~= lastCacheIdentifier) then
+
+				lastCacheIdentifier = currentCacheIdentifier
+
+				return cachedCommandPayloadArray
+
+			end
+			
+		end
 
 		local url = "http://" .. address .. ":" .. port .. "/request-commands"
 
@@ -212,6 +228,8 @@ function DataPredictNucleus.new(propertyTable: {})
 					local commandPayloadArray = data.commandPayloadArray
 
 					if (not commandPayloadArray) then return nil end
+
+					commandPayloadArray.cacheIdentifier = HttpService:GenerateGUID(false)
 
 					CommandPayloadArrayStore:SetAsync(commandPayloadArrayKey, commandPayloadArray, commandPayloadArrayCacheDuration)
 
