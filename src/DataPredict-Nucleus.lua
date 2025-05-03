@@ -189,9 +189,10 @@ function DataPredictNucleus.new(propertyTable: {})
 	end
 
 	local function fetchCommandPayloadArray()
+		
 		local cachedCommandPayloadArray = CommandPayloadArrayStore:GetAsync(commandPayloadArrayKey)
 
-		if cachedCommandPayloadArray then
+		if (cachedCommandPayloadArray) then
 			
 			local currentCacheIdentifier = cachedCommandPayloadArray.cacheIdentifier
 
@@ -217,7 +218,7 @@ function DataPredictNucleus.new(propertyTable: {})
 				
 			end)
 
-			if responseSuccess then
+			if (responseSuccess) then
 				
 				local decodeSuccess, data = pcall(function()
 					
@@ -225,7 +226,7 @@ function DataPredictNucleus.new(propertyTable: {})
 					
 				end)
 
-				if decodeSuccess and data then
+				if (decodeSuccess) and (data) then
 					
 					local commandPayloadArray = data.commandPayloadArray
 					
@@ -440,7 +441,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 			end)
 
-			if responseSuccess then
+			if (responseSuccess) then
 
 				local decodeSuccess, response = pcall(function()
 
@@ -448,7 +449,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 				end)
 
-				if decodeSuccess then 
+				if (decodeSuccess) then 
 
 					addLog("Normal", modelName .. " model parameters " .. key .. " has been sent using the \"getModelParameters\" command.")
 
@@ -492,7 +493,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 			end)
 
-			if success then
+			if (success) then
 
 				addLog("Normal", modelName .. " model parameters ".. key .. " has been replaced using the \"setModelParameters\" command.")
 
@@ -530,7 +531,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 			end)
 
-			if success then
+			if (success) then
 
 				addLog("Normal", modelName .. " parameters ".. key .. " has been replaced using the \"setParameters\" command.")
 
@@ -628,7 +629,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 			end)
 
-			if responseSuccess then
+			if (responseSuccess) then
 
 				local decodeSuccess, response = pcall(function()
 
@@ -636,7 +637,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 				end)
 
-				if decodeSuccess then 
+				if (decodeSuccess) then 
 
 					addLog("Normal", modelName .. " prediction for " .. key .. " has been sent using the \"predict\" command.")
 
@@ -680,7 +681,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 			end)
 
-			if success then
+			if (success) then
 
 				addLog("Normal", modelName .. " model parameters ".. key .. " has been updated using the \"gradientDescent\" command.")
 
