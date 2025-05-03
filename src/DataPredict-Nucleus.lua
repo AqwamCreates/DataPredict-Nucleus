@@ -345,11 +345,11 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		if (not modelData) then addLog("Error", modelName .. " data does not exist.") return end
 
-		local modelParameterNames = modelData.modelParameterNames
+		local modelParameterNameArray = modelData.modelParameterNameArray
 
 		for key, Model in pairs(modelData.ModelDictionary) do
 
-			functionToApply(key, Model, modelParameterNames)
+			functionToApply(key, Model, modelParameterNameArray)
 
 		end
 
@@ -431,7 +431,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		if (not ModelParameters) then addLog("Error", modelName .. " model parameters does not exist when calling the \"setModelParameters\" command.")  return end
 
-		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNames)
+		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
 
 			if (keyArray) then
 
@@ -469,7 +469,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		if (not Parameters) then addLog("Error", modelName .. " parameters does not exist when calling the \"setParameters\" command.")  return end
 
-		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNames)
+		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
 
 			if (keyArray) then
 
@@ -511,7 +511,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		if (not labelMatrix) then addLog("Error", modelName .. " label matrix does not exist when calling the \"train\" command.")  return end
 
-		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNames)
+		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
 
 			if (keyArray) then
 
@@ -553,7 +553,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		local url = "http://" .. address .. ":" .. port
 
-		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNames)
+		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
 
 			if (keyArray) then
 
@@ -619,7 +619,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		if (not ModelParametersGradient) then addLog("Error", modelName .. " model parameters gradient does not exist when calling the \"gradientDescent\" command.")  return end
 
-		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNames)
+		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
 
 			if (keyArray) then
 
