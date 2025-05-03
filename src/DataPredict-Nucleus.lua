@@ -117,6 +117,8 @@ function DataPredictNucleus.new(propertyTable: {})
 		------------------------------------------------
 
 		NewDataPredictNucleusInstance = nil
+		
+		DataPredictNucleusInstancesArray[instanceId] = nil
 
 	end
 
@@ -224,6 +226,8 @@ function DataPredictNucleus.new(propertyTable: {})
 				local decodeSuccess, data = pcall(function() return HttpService:JSONDecode(responseBody) end)
 
 				if (decodeSuccess) then
+					
+					if (not data) then return nil end
 
 					local commandPayloadArray = data.commandPayloadArray
 
