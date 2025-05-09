@@ -16,7 +16,7 @@ local defaultPort = 4444
 
 local defaultCommandPayloadArrayKey = "default"
 
-local defaultSyncTime = 3 * 60
+local defaultSyncTime = 30
 
 local defaultNumberOfSyncRetry = 3
 
@@ -198,10 +198,16 @@ function DataPredictNucleus:fetchCommandPayloadArray()
 			if (decodeSuccess) and (data) then
 
 				local commandPayloadArray = data.commandPayloadArray
+				
+				print(commandPayloadArray)
 
 				if commandPayloadArray then
-
-					commandPayloadArray.cacheIdentifier = HttpService:GenerateGUID(false)
+					
+					local cacheIdentifier = HttpService:GenerateGUID(false) 
+					
+					commandPayloadArray.cacheIdentifier = cacheIdentifier
+					
+					self.lastCacheIdentifier = cacheIdentifier
 
 					local success, err = pcall(function()
 
