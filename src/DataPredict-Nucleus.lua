@@ -426,6 +426,8 @@ function DataPredictNucleus.new(propertyTable: {})
 			local ModelParameters = Model:getModelParameters()
 
 			local requestDictionary = {
+				
+				uuid = uuid,
 
 				apiKey = apiKey,
 
@@ -618,6 +620,8 @@ function DataPredictNucleus.new(propertyTable: {})
 			local labelMatrix = Model:predict(featureMatrix, returnOriginalOutput)
 
 			local requestDictionary = {
+				
+				uuid = uuid,
 
 				apiKey = apiKey,
 
