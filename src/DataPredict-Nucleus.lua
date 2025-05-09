@@ -10,9 +10,7 @@ local CommandPayloadArrayStore = MemoryStoreService:GetSortedMap("CommandPayload
 local DataPredictLibraryLinker = script.DataPredictLibraryLinker.Value
 local TensorL2DLibraryLinker = script.TensorL2DLibraryLinker.Value
 
-local defaultAddress = "localhost"
-
-local defaultPort = 4444
+local defaultUrl = "http://localhost:4444"
 
 local defaultCommandPayloadArrayKey = "default"
 
@@ -44,9 +42,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 	if existingInstance then return existingInstance end
 
-	local address: string = propertyTable.address or defaultAddress
-
-	local port: string = propertyTable.port or defaultPort
+	local url: string = propertyTable.url or defaultUrl
 
 	local uuid: string = propertyTable.uuid
 
@@ -90,9 +86,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		existingInstance = nil
 
-		address = nil
-
-		port = nil
+		url = nil
 
 		apiKey = nil
 
@@ -208,7 +202,7 @@ function DataPredictNucleus.new(propertyTable: {})
 			
 		end
 
-		local url = "http://" .. address .. ":" .. port .. "/request-commands"
+		local fullUrl = url .. "/request-commands"
 		local requestDictionary = { uuid = uuid, apiKey = apiKey }
 		local requestBody = HttpService:JSONEncode(requestDictionary)
 
@@ -216,7 +210,7 @@ function DataPredictNucleus.new(propertyTable: {})
 			
 			local responseSuccess, responseBody = pcall(function()
 				
-				return HttpService:PostAsync(url, requestBody, Enum.HttpContentType.ApplicationJson)
+				return HttpService:PostAsync(fullUrl, requestBody, Enum.HttpContentType.ApplicationJson)
 				
 			end)
 
@@ -419,7 +413,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		local keyArray = valueDictionary.keyArray
 
-		local url = "http://" .. address .. ":" .. port .. "/send-model-parameters"
+		local fullUrl = url .. "/send-model-parameters"
 
 		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
 
@@ -447,7 +441,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 			local responseSuccess, responseBody = pcall(function()
 
-				return HttpService:PostAsync(url, requestBody, Enum.HttpContentType.ApplicationJson)
+				return HttpService:PostAsync(fullUrl, requestBody, Enum.HttpContentType.ApplicationJson)
 
 			end)
 
@@ -611,7 +605,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		if (not featureMatrix) then addLog("Error", modelName .. " feature matrix does not exist when calling the \"predict\" command.") return end
 
-		local url = "http://" .. address .. ":" .. port .. "/send-label-matrix"
+		local fullURL = url .. "/send-label-matrix"
 
 		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
 
@@ -637,7 +631,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 			local responseSuccess, responseBody = pcall(function()
 
-				return HttpService:PostAsync(url, requestBody, Enum.HttpContentType.ApplicationJson)
+				return HttpService:PostAsync(fullURL, requestBody, Enum.HttpContentType.ApplicationJson)
 
 			end)
 
