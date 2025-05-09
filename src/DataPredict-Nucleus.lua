@@ -183,8 +183,8 @@ function DataPredictNucleus.new(propertyTable: {})
 	local function processCommandPayloadArray(commandPayloadArray)
 
 		for _, commandPayload in ipairs(commandPayloadArray) do
-
-			processCommandPayload(commandPayload)
+			
+			task.spawn(processCommandPayload, commandPayload)
 
 		end
 
