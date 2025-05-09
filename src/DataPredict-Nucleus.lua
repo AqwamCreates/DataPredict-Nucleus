@@ -34,6 +34,7 @@ local DataPredictNucleusInstancesArray = {}
 
 local DataPredictNucleus = {}
 
+DataPredictNucleus.__index = DataPredictNucleus
 
 function DataPredictNucleus.new(propertyTable: {})
 
