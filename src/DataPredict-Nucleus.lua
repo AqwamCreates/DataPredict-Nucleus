@@ -30,6 +30,8 @@ local isStudio = RunService:IsStudio()
 
 local gameJobId = (isStudio and "Studio") or game.JobId
 
+local ignoreValueDictionaryKeyNameArray = {"modelName", "keyArray"}
+
 local DataPredictNucleusInstancesArray = {}
 
 local DataPredictNucleus = {}
@@ -517,10 +519,6 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		local keyArray = valueDictionary.keyArray
 
-		local Parameters = valueDictionary.Parameters
-
-		if (not Parameters) then addLog("Error", modelName .. " parameters does not exist when calling the \"setParameters\" command.")  return end
-
 		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
 
 			if (keyArray) then
@@ -531,7 +529,13 @@ function DataPredictNucleus.new(propertyTable: {})
 
 			local success = pcall(function()
 
-				for key, value in pairs(Parameters) do Model[key] = value end
+				for key, value in pairs(valueDictionary) do 
+					
+					if (table.find(ignoreValueDictionaryKeyNameArray, key)) then continue end
+					
+					Model[key] = value 
+					
+				end
 
 			end)
 
