@@ -419,7 +419,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		local keyArray = valueDictionary.keyArray
 
-		local url = "http://" .. address .. ":" .. port
+		local url = "http://" .. address .. ":" .. port .. "/send-model-parameters"
 
 		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
 
@@ -611,7 +611,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		if (not featureMatrix) then addLog("Error", modelName .. " feature matrix does not exist when calling the \"predict\" command.") return end
 
-		local url = "http://" .. address .. ":" .. port
+		local url = "http://" .. address .. ":" .. port .. "/send-label-matrix"
 
 		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
 
