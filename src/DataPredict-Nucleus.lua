@@ -236,7 +236,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 						commandPayloadArray.cacheIdentifier = cacheIdentifier
 
-						self.lastCacheIdentifier = cacheIdentifier
+						lastCacheIdentifier = cacheIdentifier
 
 						local success, err = pcall(function()
 							
