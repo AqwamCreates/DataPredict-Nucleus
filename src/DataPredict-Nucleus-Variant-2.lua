@@ -200,8 +200,6 @@ function DataPredictNucleus:fetchCommandPayloadArray()
 			if (decodeSuccess) and (data) then
 
 				local commandPayloadArray = data.commandPayloadArray
-				
-				print(commandPayloadArray)
 
 				if commandPayloadArray then
 					
