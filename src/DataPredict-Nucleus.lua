@@ -338,8 +338,6 @@ function DataPredictNucleus.new(propertyTable: {})
 	end
 
 	local function addModelData(modelName, ModelDictionary, modelParameterNameArray)
-		
-		print(ModelDictionary)
 
 		if (type(modelName) ~= "string") then error("Model name is not a string.") return end
 
@@ -734,6 +732,12 @@ function DataPredictNucleus.new(propertyTable: {})
 	commandFunctionDictionary["gradientDescent"] = gradientDescent
 
 	commandFunctionDictionary["runCommand"] = runCommand
+	
+	local function tableUnwrap(table, functionToRun, ...)
+		
+		functionToRun(...)
+		
+	end
 
 	NewDataPredictNucleusInstance = {
 
