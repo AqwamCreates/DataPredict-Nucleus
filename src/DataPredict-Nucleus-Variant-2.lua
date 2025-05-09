@@ -20,7 +20,7 @@ local defaultSyncTime = 30
 
 local defaultNumberOfSyncRetry = 3
 
-local defaultSyncRetryDelay = 2
+local defaultSyncRetryDelay = 3
 
 local defaultCommandPayloadArrayCacheDuration = 30
 
@@ -240,6 +240,10 @@ function DataPredictNucleus:fetchCommandPayloadArray()
 					end
 
 					return commandPayloadArray
+					
+				else
+					
+					return nil
 
 				end
 
