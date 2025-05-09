@@ -30,7 +30,7 @@ local isStudio = RunService:IsStudio()
 
 local gameJobId = (isStudio and "Studio") or game.JobId
 
-local ignoreValueDictionaryKeyNameArray = {"modelName", "keyArray"}
+local ignoreValueDictionaryKeyNameArray = {"modelName", "keyArray", "featureMatrix", "featureVector", "labelMatrix", "labelVector"}
 
 local DataPredictNucleusInstancesArray = {}
 
