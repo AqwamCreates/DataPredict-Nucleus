@@ -314,6 +314,8 @@ function DataPredictNucleus.new(propertyTable: {})
 				task.wait(syncTime)
 
 			end
+			
+			isSyncThreadRunning = false
 
 		end)
 
