@@ -10,9 +10,7 @@ local CommandPayloadArrayStore = MemoryStoreService:GetSortedMap("CommandPayload
 local DataPredictLibraryLinker = script.DataPredictLibraryLinker.Value
 local TensorL2DLibraryLinker = script.TensorL2DLibraryLinker.Value
 
-local defaultAddress = "localhost"
-
-local defaultPort = 4444
+local defaultUrl = "http://localhost:4444"
 
 local defaultCommandPayloadArrayKey = "default"
 
@@ -50,9 +48,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 	setmetatable(NewDataPredictNucleusInstance, DataPredictNucleus)
 
-	NewDataPredictNucleusInstance.address = propertyTable.address or defaultAddress
-
-	NewDataPredictNucleusInstance.port = propertyTable.port or defaultPort
+	NewDataPredictNucleusInstance.url = propertyTable.url or defaultUrl
 
 	NewDataPredictNucleusInstance.uuid = propertyTable.uuid
 
@@ -83,6 +79,44 @@ function DataPredictNucleus.new(propertyTable: {})
 	NewDataPredictNucleusInstance.lastCacheIdentifier = nil
 
 	return NewDataPredictNucleusInstance
+
+end
+
+function DataPredictNucleus:destroy()
+
+	isSyncThreadRunning = false
+	
+	local instanceId = self.instanceId
+
+	self.instanceId = nil
+
+	self.existingInstance = nil
+
+	self.url = nil
+
+	self.apiKey = nil
+
+	self.encryptionKey = nil
+
+	self.commandPayloadArrayKey = nil
+
+	self.syncTime = nil
+
+	self.numberOfSyncRetry = nil
+
+	self.syncRetryDelay = nil
+
+	self.commandPayloadArrayCacheDuration = nil
+
+	self.commandFunctionDictionary = nil
+
+	self.modelDataDictionary = nil
+
+	self.logArray = nil
+
+	self.lastCacheIdentifier = nil
+
+	DataPredictNucleusInstancesArray[instanceId] = nil
 
 end
 
@@ -183,7 +217,7 @@ function DataPredictNucleus:fetchCommandPayloadArray()
 
 	local syncRetryDelay = self.syncRetryDelay
 
-	local url = "http://" .. self.address .. ":" .. self.port .. "/request-commands"
+	local url = self.url .. "/request-commands"
 	local requestDictionary = { uuid = self.uuid, apiKey = self.apiKey }
 	local requestBody = HttpService:JSONEncode(requestDictionary)
 
@@ -398,7 +432,7 @@ function DataPredictNucleus:getModelParameters(valueDictionary)
 
 	local keyArray = valueDictionary.keyArray
 
-	local url = "http://" .. self.address .. ":" .. self.port
+	local fullUrl = self.url .. "/send-model-parameters"
 
 	self:applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
 
@@ -426,7 +460,7 @@ function DataPredictNucleus:getModelParameters(valueDictionary)
 
 		local responseSuccess, responseBody = pcall(function()
 
-			return HttpService:PostAsync(url, requestBody, Enum.HttpContentType.ApplicationJson)
+			return HttpService:PostAsync(fullUrl, requestBody, Enum.HttpContentType.ApplicationJson)
 
 		end)
 
@@ -594,7 +628,7 @@ function DataPredictNucleus:predict(valueDictionary)
 
 	if (not featureMatrix) then self:addLog("Error", modelName .. " feature matrix does not exist when calling the \"predict\" command.") return end
 
-	local url = "http://" .. self.address .. ":" .. self.port
+	local fullUrl = self.url .. "/send-model-parameters"
 
 	self:applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
 
@@ -620,7 +654,7 @@ function DataPredictNucleus:predict(valueDictionary)
 
 		local responseSuccess, responseBody = pcall(function()
 
-			return HttpService:PostAsync(url, requestBody, Enum.HttpContentType.ApplicationJson)
+			return HttpService:PostAsync(fullUrl, requestBody, Enum.HttpContentType.ApplicationJson)
 
 		end)
 
