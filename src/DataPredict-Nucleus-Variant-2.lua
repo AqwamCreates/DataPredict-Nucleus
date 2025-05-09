@@ -93,6 +93,8 @@ function DataPredictNucleus:destroy()
 	self.existingInstance = nil
 
 	self.url = nil
+	
+	self.uuid = nil
 
 	self.apiKey = nil
 
@@ -446,6 +448,8 @@ function DataPredictNucleus:getModelParameters(valueDictionary)
 
 		local requestDictionary = {
 
+			uuid = self.uuid,
+
 			apiKey = self.apiKey,
 
 			modelName = modelName,
@@ -641,6 +645,8 @@ function DataPredictNucleus:predict(valueDictionary)
 		local labelMatrix = Model:predict(featureMatrix, returnOriginalOutput)
 
 		local requestDictionary = {
+			
+			uuid = self.uuid,
 
 			apiKey = self.apiKey,
 
