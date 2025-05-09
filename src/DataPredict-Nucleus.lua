@@ -87,6 +87,8 @@ function DataPredictNucleus.new(propertyTable: {})
 		existingInstance = nil
 
 		url = nil
+		
+		uuid = nil
 
 		apiKey = nil
 
