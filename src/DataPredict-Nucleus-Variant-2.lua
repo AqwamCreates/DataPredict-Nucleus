@@ -134,6 +134,8 @@ function DataPredictNucleus:processCommandPayload(commandPayload)
 	local valueDictionary = commandPayload["valueDictionary"]
 
 	local commandFunction = self.commandFunctionDictionary[command]
+	
+	if (not commandFunction) then self:addLog("Error", "Command function for " .. command .. " does not exist.") return end
 
 	if (not commandFunction) then self:addLog("Error", "Command function for " .. command .. " does not exist.") return end
 
