@@ -150,8 +150,12 @@ end
 function DataPredictNucleus:processCommandPayloadArray(commandPayloadArray)
 
 	for _, commandPayload in ipairs(commandPayloadArray) do
-
-		self:processCommandPayload(commandPayload)
+		
+		task.spawn(function()
+			
+			self:processCommandPayload(commandPayload)
+			
+		end)
 
 	end
 
