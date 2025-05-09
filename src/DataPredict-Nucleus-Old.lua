@@ -232,7 +232,11 @@ function DataPredictNucleus.new(propertyTable: {})
 					
 					if commandPayloadArray then
 
-						commandPayloadArray.cacheIdentifier = HttpService:GenerateGUID(false)
+						local cacheIdentifier = HttpService:GenerateGUID(false) 
+
+						commandPayloadArray.cacheIdentifier = cacheIdentifier
+
+						self.lastCacheIdentifier = cacheIdentifier
 
 						local success, err = pcall(function()
 							
@@ -334,6 +338,8 @@ function DataPredictNucleus.new(propertyTable: {})
 	end
 
 	local function addModelData(modelName, ModelDictionary, modelParameterNameArray)
+		
+		print(ModelDictionary)
 
 		if (type(modelName) ~= "string") then error("Model name is not a string.") return end
 
