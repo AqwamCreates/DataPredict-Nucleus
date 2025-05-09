@@ -16,7 +16,7 @@ local defaultPort = 4444
 
 local defaultCommandPayloadArrayKey = "default"
 
-local defaultSyncTime = 3 * 60
+local defaultSyncTime = 3
 
 local defaultNumberOfSyncRetry = 3
 
@@ -269,6 +269,10 @@ function DataPredictNucleus.new(propertyTable: {})
 						end
 
 						return commandPayloadArray
+						
+					else
+						
+						return nil
 						
 					end
 					
