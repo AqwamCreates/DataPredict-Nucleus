@@ -339,7 +339,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 	end
 
-	local function addModelData(modelName, ModelDictionary, modelParameterNameArray)
+	local function addModelData(modelName, ModelDictionary, modelParameterNameArray, classNameArray)
 
 		if (type(modelName) ~= "string") then error("Model name is not a string.") return end
 
@@ -347,7 +347,9 @@ function DataPredictNucleus.new(propertyTable: {})
 
 			ModelDictionary = ModelDictionary or {}, 
 
-			modelParameterNameArray = modelParameterNameArray or {}
+			modelParameterNameArray = modelParameterNameArray or {},
+			
+			classNameArray = classNameArray or {},
 
 		}
 
@@ -400,10 +402,12 @@ function DataPredictNucleus.new(propertyTable: {})
 		if (not modelData) then addLog("Error", modelName .. " data does not exist.") return end
 
 		local modelParameterNameArray = modelData.modelParameterNameArray
+		
+		local classNameArray = modelData.classNameArray
 
 		for key, Model in pairs(modelData.ModelDictionary) do
 
-			functionToApply(key, Model, modelParameterNameArray)
+			functionToApply(key, Model, modelParameterNameArray, classNameArray)
 
 		end
 
@@ -417,7 +421,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		local fullUrl = url .. "/send-model-parameters"
 
-		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
+		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray, classNameArray)
 
 			if keyArray then
 
@@ -487,7 +491,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		if (not ModelParameters) then addLog("Error", modelName .. " model parameters does not exist when calling the \"setModelParameters\" command.")  return end
 
-		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
+		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray, classNameArray)
 
 			if (keyArray) then
 
@@ -521,7 +525,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		local keyArray = valueDictionary.keyArray
 
-		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
+		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray, classNameArray)
 
 			if (keyArray) then
 
@@ -569,7 +573,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		if (not labelMatrix) then addLog("Error", modelName .. " label matrix does not exist when calling the \"train\" command.")  return end
 
-		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
+		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray, classNameArray)
 
 			if (keyArray) then
 
@@ -611,7 +615,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		local fullURL = url .. "/send-label-matrix"
 
-		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
+		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray, classNameArray)
 
 			if (keyArray) then
 
@@ -630,6 +634,8 @@ function DataPredictNucleus.new(propertyTable: {})
 				modelName = modelName,
 
 				labelMatrix = labelMatrix,
+				
+				classNameArray = classNameArray,
 
 			}
 
@@ -679,7 +685,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 		if (not ModelParametersGradient) then addLog("Error", modelName .. " model parameters gradient does not exist when calling the \"gradientDescent\" command.")  return end
 
-		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
+		applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray, classNameArray)
 
 			if (keyArray) then
 
