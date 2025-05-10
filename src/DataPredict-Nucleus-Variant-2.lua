@@ -464,7 +464,9 @@ function DataPredictNucleus:getModelParameters(valueDictionary)
 
 			modelParameterNameArray = modelParameterNameArray,
 			
-			modelParametersType = modelParametersType
+			modelParametersType = modelParametersType,
+			
+			classNameArray = classNameArray
 
 		}
 
