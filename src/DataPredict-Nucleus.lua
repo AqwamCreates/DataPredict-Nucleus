@@ -447,7 +447,9 @@ function DataPredictNucleus.new(propertyTable: {})
 
 				modelParameterNameArray = modelParameterNameArray,
 				
-				modelParametersType = modelParametersType
+				modelParametersType = modelParametersType,
+				
+				classNameArray = classNameArray,
 
 			}
 
