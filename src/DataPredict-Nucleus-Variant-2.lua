@@ -356,7 +356,7 @@ function DataPredictNucleus:removeCommand(commandName)
 
 end
 
-function DataPredictNucleus:addModelData(modelName, ModelDictionary, modelParameterNameArray)
+function DataPredictNucleus:addModelData(modelName, ModelDictionary, modelParameterNameArray, classNameArray)
 
 	print(ModelDictionary)
 
@@ -366,7 +366,9 @@ function DataPredictNucleus:addModelData(modelName, ModelDictionary, modelParame
 
 		ModelDictionary = ModelDictionary or {}, 
 
-		modelParameterNameArray = modelParameterNameArray or {}
+		modelParameterNameArray = modelParameterNameArray or {},
+		
+		classNameArray = classNameArray or {}
 
 	}
 
@@ -420,9 +422,11 @@ function DataPredictNucleus:applyFunctionToAllModelsInModelData(modelName, funct
 
 	local modelParameterNameArray = modelData.modelParameterNameArray
 
+	local classNameArray = modelData.classNameArray
+
 	for key, Model in pairs(modelData.ModelDictionary) do
 
-		functionToApply(key, Model, modelParameterNameArray)
+		functionToApply(key, Model, modelParameterNameArray, classNameArray)
 
 	end
 
@@ -436,7 +440,7 @@ function DataPredictNucleus:getModelParameters(valueDictionary)
 
 	local fullUrl = self.url .. "/send-model-parameters"
 
-	self:applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
+	self:applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray, classNameArray)
 
 		if keyArray then
 
@@ -506,7 +510,7 @@ function DataPredictNucleus:setModelParameters(valueDictionary)
 
 	if (not ModelParameters) then self:addLog("Error", modelName .. " model parameters does not exist when calling the \"setModelParameters\" command.")  return end
 
-	self:applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
+	self:applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray, classNameArray)
 
 		if (keyArray) then
 
@@ -544,7 +548,7 @@ function DataPredictNucleus:setParameters(valueDictionary)
 
 	if (not Parameters) then self:addLog("Error", modelName .. " parameters does not exist when calling the \"setParameters\" command.")  return end
 
-	self:applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
+	self:applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray, classNameArray)
 
 		if (keyArray) then
 
@@ -592,7 +596,7 @@ function DataPredictNucleus:train(valueDictionary)
 
 	if (not labelMatrix) then self:addLog("Error", modelName .. " label matrix does not exist when calling the \"train\" command.")  return end
 
-	self:applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
+	self:applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray, classNameArray)
 
 		if (keyArray) then
 
@@ -634,7 +638,7 @@ function DataPredictNucleus:predict(valueDictionary)
 
 	local fullUrl = self.url .. "/send-model-parameters"
 
-	self:applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
+	self:applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray, classNameArray)
 
 		if (keyArray) then
 
@@ -653,6 +657,8 @@ function DataPredictNucleus:predict(valueDictionary)
 			modelName = modelName,
 
 			labelMatrix = labelMatrix,
+			
+			classNameArray = classNameArray,
 
 		}
 
@@ -702,7 +708,7 @@ function DataPredictNucleus:gradientDescent(valueDictionary)
 
 	if (not ModelParametersGradient) then self:addLog("Error", modelName .. " model parameters gradient does not exist when calling the \"gradientDescent\" command.")  return end
 
-	self:applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray)
+	self:applyFunctionToAllModelsInModelData(modelName, function(key, Model, modelParameterNameArray, classNameArray)
 
 		if (keyArray) then
 
