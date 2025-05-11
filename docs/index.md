@@ -4,8 +4,6 @@ By using or possessing any copies of this library or its assets (including the i
 
 For information regarding potential license violations and eligibility for a bounty reward, please refer to the [Terms And Conditions Violation Bounty Reward Information](TermsAndConditionsViolationBountyRewardInformation.md).
 
-![DataPredictIconSmall](https://github.com/AqwamCreates/DataPredict/assets/67371914/1122cce4-747b-4054-88f0-2685414b0d73)
-
 | Version | Current Version Number |
 |---------|------------------------|
 | Release | 0.0                    |
