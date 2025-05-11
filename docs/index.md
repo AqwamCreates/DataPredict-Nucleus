@@ -6,8 +6,8 @@ For information regarding potential license violations and eligibility for a bou
 
 | Version | Current Version Number |
 |---------|------------------------|
-| Release | 0.0                    |
-| Beta    | 0.1.0                  |          
+| Release | 1.0                    |
+| Beta    | 1.0.0                  |          
 
 DataPredict™ Nucleus is a remote machine learning model controller for Roblox.
 
