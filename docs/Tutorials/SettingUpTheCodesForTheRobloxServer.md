@@ -58,7 +58,7 @@ Finally, we will need to move our model to model data.
 
 local key = "tutorial"
 
-DataPredict:addModelToModelData(modelName, key, LinearRegressionModel)
+DataPredict.addModelToModelData(modelName, key, LinearRegressionModel)
 
 ```
 
