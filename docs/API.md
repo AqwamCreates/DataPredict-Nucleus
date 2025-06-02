@@ -83,7 +83,7 @@ DataPredictNucleus:addModelData(modelName: string, modelDictionary: {}, modelPar
 
     * Centroids
 
- * classNameArray: An array containing all the classes based on the output of the model.
+* classNameArray: An array containing all the classes based on the output of the model.
 
 ### removeModelData()
 
