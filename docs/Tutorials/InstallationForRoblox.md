@@ -12,7 +12,7 @@ To start, we must first link our machine/deep learning library with our matrix l
 | Version | Machine And Deep Learning Library (DataPredict)                                                                                                           |
 |---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Release | [DataPredict (Release Version 2.3)](https://github.com/AqwamCreates/DataPredict/blob/main/module_scripts/DataPredict%20-%20Release%20Version%202.3.rbxm)  |
-| Beta    | [DataPredict (Beta 0.0.0)](https://github.com/AqwamCreates/DataPredict/blob/main/module_scripts/AqwamMachineAndDeepLearningLibrary.rbxm)                  |
+| Beta    | [DataPredict (Beta 2.3.0)](https://github.com/AqwamCreates/DataPredict/blob/main/module_scripts/AqwamMachineAndDeepLearningLibrary.rbxm)                  |
 
 | Version | 2D Tensor Library (TensorL-2D)                                                               |
 |---------|----------------------------------------------------------------------------------------------|
