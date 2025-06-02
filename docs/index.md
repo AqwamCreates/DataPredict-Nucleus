@@ -21,6 +21,12 @@ In addition, if you are interested in Roblox tutorials and future projects by me
 
 [Installation For Roblox](Tutorials/InstallationForRoblox.md)
 
+### Using The DataPredict Nucleus
+
+[Setting Up The Codes For The Roblox Server](Tutorials/SettingUpTheCodesForTheRobloxServer.md)
+
+[Sending The Commands From The Front End](Tutorials/SendingTheCommandsFromTheFrontEnd.md)
+
 ## The API
 
 [API Reference](API.md)
