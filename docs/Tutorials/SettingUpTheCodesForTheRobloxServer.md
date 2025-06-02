@@ -18,7 +18,7 @@ As for the API key, you are required to log in with your account and must add it
 
 Once you note down those two information, place them to the Roblox Studio code as shown below.
 
-```
+```lua
 
 local DataPredictNucleusBaseInstance = require(DataPredictNucleus)
 
@@ -34,7 +34,7 @@ Currently, our DataPredict™ Nucleus instance does not do anything because we d
 
 First, we need to create model data so we can have a place to store our models.
 
-```
+```lua
 
 local modelName = "LinearRegression"
 
@@ -44,7 +44,7 @@ DataPredictNucleus.addModelData("LinearRegression")
 
 Then, we will need to create our models.
 
-```
+```lua
 
 local DataPredict = require(DataPredict) -- Get the machine and deep learning library, DataPredict.
 
@@ -52,13 +52,15 @@ local LinearRegressionModel = DataPredict.Models.LinearRegression.new({learningR
 
 ```
 
-Finally, we will need to move our model to model data.
+Finally, we will need to move our model to model data and start syncing.
 
-```
+```lua
 
 local key = "tutorial"
 
 DataPredict.addModelToModelData(modelName, key, LinearRegressionModel)
+
+DataPredictNucleus.startSync()
 
 ```
 
