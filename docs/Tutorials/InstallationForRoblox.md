@@ -32,7 +32,7 @@ Once you put those three libraries into your game, make sure you link them all u
 
 ![image](https://github.com/user-attachments/assets/800beed0-6eb7-4304-8fb4-5cf853448efe)
 
-Next, we will use require() function to our machine/deep learning library:
+Next, we will use require() function to our DataPredict Nucleus library:
 
 ```lua
 
