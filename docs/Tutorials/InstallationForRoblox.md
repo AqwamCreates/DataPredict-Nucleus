@@ -14,9 +14,9 @@ To start, we must first link our machine/deep learning library with our matrix l
 | Release | [DataPredict (Release Version 2.3)](https://github.com/AqwamCreates/DataPredict/blob/main/module_scripts/DataPredict%20-%20Release%20Version%202.3.rbxm)  |
 | Beta    | [DataPredict (Beta 0.0.0)](https://github.com/AqwamCreates/DataPredict/blob/main/module_scripts/AqwamMachineAndDeepLearningLibrary.rbxm)                  |
 
-| Version | 2D Tensor Library (TensorL-2D)                                                                      |
-|---------|-----------------------------------------------------------------------------------------------------|
-| Beta    | [Aqwam's 2D Tensor Library](https://github.com/AqwamCreates/TensorL-2D/blob/main/src/TensorL2D.lua) |
+| Version | 2D Tensor Library (TensorL-2D)                                                               |
+|---------|----------------------------------------------------------------------------------------------|
+| Beta    | [TensorL-2D Library](https://github.com/AqwamCreates/TensorL-2D/blob/main/src/TensorL2D.lua) |
 
 You can read the Terms And Conditions for the DataPredict library [here](https://github.com/AqwamCreates/DataPredict/blob/main/docs/TermsAndConditions.md) and the TensorL2D Library [here](https://github.com/AqwamCreates/TensorL-2D/blob/main/docs/TermsAndConditions.md).
 
