@@ -2,7 +2,7 @@
 
 In this library, we can remotely control our DataPredict ML models using the front end at [nucleus.datapredict.online](https://nucleus.datapredict.online).
 
-To start, we must first download all three libraries from the link below.
+To start, we must first download all three libraries from the links below.
 
 | Version | Remote ML Models Controller For DataPredict (DataPredict Nucleus)                                                                                                                  |
 |---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
