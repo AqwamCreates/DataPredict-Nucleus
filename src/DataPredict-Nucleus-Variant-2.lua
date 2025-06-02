@@ -16,7 +16,7 @@ local defaultCommandPayloadArrayKey = "default"
 
 local defaultSyncTime = 30
 
-local defaultNumberOfSyncRetry = 3
+local defaultMaximumNumberOfSyncRetry = 3
 
 local defaultSyncRetryDelay = 3
 
@@ -42,7 +42,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 	local existingInstance = DataPredictNucleusInstancesArray[instanceId]
 
-	if existingInstance then return existingInstance end
+	if (existingInstance) then return existingInstance end
 
 	local NewDataPredictNucleusInstance = {}
 
@@ -60,7 +60,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 	NewDataPredictNucleusInstance.syncTime = propertyTable.syncTime or defaultSyncTime
 
-	NewDataPredictNucleusInstance.numberOfSyncRetry = propertyTable.numberOfSyncRetry or defaultNumberOfSyncRetry
+	NewDataPredictNucleusInstance.maximumNumberOfSyncRetry = propertyTable.maximumNumberOfSyncRetry or defaultMaximumNumberOfSyncRetry
 
 	NewDataPredictNucleusInstance.syncRetryDelay = propertyTable.syncRetryDelay or defaultSyncRetryDelay
 
@@ -104,7 +104,7 @@ function DataPredictNucleus:destroy()
 
 	self.syncTime = nil
 
-	self.numberOfSyncRetry = nil
+	self.maximumNumberOfSyncRetry = nil
 
 	self.syncRetryDelay = nil
 
@@ -159,7 +159,7 @@ function DataPredictNucleus:getLogArray()
 
 end
 
-function DataPredictNucleus:clearAllLogs()
+function DataPredictNucleus:clearLogArray()
 
 	table.clear(self.logArray)
 
@@ -223,7 +223,7 @@ function DataPredictNucleus:fetchCommandPayloadArray()
 	local requestDictionary = { uuid = self.uuid, apiKey = self.apiKey }
 	local requestBody = HttpService:JSONEncode(requestDictionary)
 
-	for attempt = 1, self.numberOfSyncRetry, 1 do
+	for attempt = 1, self.maximumNumberOfSyncRetry, 1 do
 
 		local responseSuccess, responseBody = pcall(function()
 

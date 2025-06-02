@@ -15,8 +15,6 @@ If there are any suggestions or issues for this library, don't be afraid to reac
 
 In addition, if you are interested in Roblox tutorials and future projects by me, then you can subscribe to me in [YouTube](https://www.youtube.com/channel/UCUrwoxv5dufEmbGsxyEUPZw).
 
-To know what this library is all about from scratch, let's have a look at the quick introduction [here](QuickIntroduction.md).
-
 ## Tutorials
 
 ### Installation
