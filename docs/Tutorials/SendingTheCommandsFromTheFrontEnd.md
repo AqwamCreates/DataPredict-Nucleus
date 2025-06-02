@@ -6,7 +6,7 @@ That being said, let's get right into it.
 
 ## Example Initial Setup
 
-In order to see the DataPredict™ Nucleus capabilities, we first need to setup a few thing.
+In order to see the DataPredict™ Nucleus capabilities, we first need to setup some stuff.
 
 First, let's prepare our data.
 
@@ -58,6 +58,9 @@ Finally, we will visualize the model parameters.
 
 local TensorL2D = require(TensorL2D) -- Let's get the 2D tensor library.
 
-TensorL2D:printTensor(LinearRegressionModel:getModelParameters())
+TensorL2D:printTensor(LinearRegressionModel:getModelParameters()) -- Then we visualize the model parameters.
 
 ```
+
+Once we visualize the model parameters, keep this in mind.
+
