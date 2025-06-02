@@ -1,8 +1,8 @@
 # Getting Started
 
-In this library, we can customize many of our models, optimizers and others to fit our needs. This was made possible thanks to the object-orientated design of our library.
+In this library, we can remotely control our DataPredict ML models using the front end at [nucleus.datapredict.online](https://nucleus.datapredict.online).
 
-To start, we must first link our machine/deep learning library with our matrix library. However, you must use "Aqwam's 2D Tensor Library" as every calculations made by our models are based on that tensor library.
+To start, we must first download all three libraries from the link below.
 
 | Version | Remote ML Models Controller For DataPredict (DataPredict Nucleus)                                                                                                                  |
 |---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
