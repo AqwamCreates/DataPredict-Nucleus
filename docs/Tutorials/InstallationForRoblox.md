@@ -31,5 +31,7 @@ Once you put those three libraries into your game, make sure you link the DataPr
 Next, we will use require() function to our machine/deep learning library:
 
 ```lua
-local DataPredictNucleus = require(DataPredictNucleus) 
+
+local DataPredictNucleus = require(DataPredictNucleus)
+
 ```
