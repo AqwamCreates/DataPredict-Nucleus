@@ -195,7 +195,6 @@ DataPredictNucleus:runCommand(valueDictionary: {})
 
 DataPredictNucleus:addLog(logType: string, logMessage: string)
 
-
 ```
 
 #### Parameters:
@@ -225,7 +224,6 @@ DataPredictNucleus:removeLog(position: number)
 ```
 
 DataPredictNucleus:getLogArray(): {{string}}
-
 
 ```
 
