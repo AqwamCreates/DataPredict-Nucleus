@@ -58,9 +58,21 @@ Finally, we will visualize the model parameters.
 
 local TensorL2D = require(TensorL2D) -- Let's get the 2D tensor library.
 
-TensorL2D:printTensor(LinearRegressionModel:getModelParameters()) -- Then we visualize the model parameters.
+TensorL2D:printTensor(ModelParameters) -- Then we visualize the model parameters.
 
 ```
 
 Once we visualize the model parameters, keep this in mind.
+
+## Sending The Commands
+
+From our previous tutorial, we have not yet added the model name to our [nucleus.datapredict.online](https://nucleus.datapredict.online) website.
+
+For that, we will need to go into the website and add the model name to the middle right edge of it. Make sure the model name is "LinearRegression" since that what we have used in our previous tutorial. This will allow us to control the models that have that model name all at once.
+
+Once you have added the model name, you will now select the getModelParameters inside that website. It will return the average of all model parameters belonging to that model name.
+
+Next, you will press the "Send Command" button at the bottom right corner of the website. This will cause the website to fetch the model parameters from all of the Roblox's servers. Note that it will take a while to load as the back end is rather limited in computational resources.
+
+Once you get the visualization of the model parameters on the website, you will notice that the values of the model parameters from the Roblox server is the same as the ones from the website.
 
