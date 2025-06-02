@@ -65,3 +65,5 @@ DataPredict:addModelToModelData(modelName, key, LinearRegressionModel)
 That is pretty much it.
 
 Now you know how to set up the codes for the Roblox server. Congratulations!
+
+You can now proceed to the next tutorial [here](SettingUpTheCodesForTheRobloxServer.md)!
