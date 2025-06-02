@@ -338,6 +338,20 @@ function DataPredictNucleus.new(propertyTable: {})
 		commandFunctionDictionary[commandName] = nil
 
 	end
+	
+	local function runCommand(valueDictionary)
+
+		local commandName = valueDictionary.commandName
+
+		if (type(commandName) ~= "string") then error("Command name is not a string.") return end
+
+		local commandFunction = commandFunctionDictionary[commandName]
+
+		if (not commandFunction) then addLog("Error", commandName .. " command does not exist.") return end
+
+		commandFunction(valueDictionary)
+
+	end
 
 	local function addModelData(modelName, ModelDictionary, modelParameterNameArray, modelParametersType, classNameArray)
 
@@ -721,20 +735,6 @@ function DataPredictNucleus.new(propertyTable: {})
 
 	end
 
-	local function runCommand(valueDictionary)
-
-		local commandName = valueDictionary.commandName
-
-		if (type(commandName) ~= "string") then error("Command name is not a string.") return end
-
-		local commandFunction = commandFunctionDictionary[commandName]
-
-		if (not commandFunction) then addLog("Error", commandName .. " command does not exist.") return end
-
-		commandFunction(valueDictionary)
-
-	end
-
 	game:BindToClose(function()
 
 		isSyncThreadRunning = false
@@ -754,12 +754,16 @@ function DataPredictNucleus.new(propertyTable: {})
 	commandFunctionDictionary["gradientDescent"] = gradientDescent
 
 	commandFunctionDictionary["runCommand"] = runCommand
+
+	--[[
 	
 	local function tableUnwrap(table, functionToRun, ...)
 		
 		functionToRun(...)
 		
 	end
+	
+	--]]
 
 	NewDataPredictNucleusInstance = {
 

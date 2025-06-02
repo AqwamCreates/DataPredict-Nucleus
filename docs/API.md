@@ -113,6 +113,82 @@ DataPredictNucleus:getModelData(modelName: string): {}
 
 * modelData: A dictionary containing all the data for that particular model.
 
+### addModelToModelData()
+
+```
+
+DataPredictNucleus:addModelToModelData(modelName: string, key: string, Model: Model)
+
+```
+#### Parameters:
+
+* modelName: The model name for the model data.
+
+* key: A unique key identifying the model.
+
+* Model: The model to be added to the model data.
+
+### removeModelFromModelData()
+
+```
+
+DataPredictNucleus:removeModelFromModelData(modelName: string, key: string)
+
+```
+#### Parameters:
+
+* modelName: The model name for the model data.
+
+* key: A unique key identifying the model.
+
+### removeModelFromModelData()
+
+```
+
+DataPredictNucleus:applyFunctionToAllModelsInModelData(modelName: string, functionToApply: function)
+
+```
+#### Parameters:
+
+* modelName: The model name for the model data.
+
+* functionToApply: The function to apply to the model data based on the model name.
+
+### addCommand()
+
+```
+
+DataPredictNucleus:addCommand(commandName: string, functionToRun: function)
+
+```
+#### Parameters:
+
+* commandName: The command name to be added.
+
+* functionToRun: The function to run when the command name is called.
+
+### removeCommand()
+
+```
+
+DataPredictNucleus:removeCommand(commandName: string)
+
+```
+#### Parameters:
+
+* commandName: The command name to be removed.
+
+### runCommand()
+
+```
+
+DataPredictNucleus:runCommand(valueDictionary: {})
+
+```
+#### Parameters:
+
+* valueDictionary: A dictionary containing what command to run. It must contain "commandName" key.
+
 ### addLog()
 
 ```
