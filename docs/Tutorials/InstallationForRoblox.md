@@ -26,7 +26,11 @@ To download the files from GitHub, you must click on the download button highlig
 
 Then drag the files into Roblox Studio from a file explorer of your choice.
 
-Once you put those three libraries into your game, make sure you link the DataPredict Library with the TensorL-2D Library. This can be done via setting the “AqwamTensorLibraryLinker” value (under the DataPredict) to the TensorL-2D Library.
+Once you put those three libraries into your game, make sure you link them all using the linkers.
+
+![image](https://github.com/user-attachments/assets/f487abe2-2919-404b-b4bb-b3b56369c8e1)
+
+![image](https://github.com/user-attachments/assets/800beed0-6eb7-4304-8fb4-5cf853448efe)
 
 Next, we will use require() function to our machine/deep learning library:
 
