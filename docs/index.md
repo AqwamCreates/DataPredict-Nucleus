@@ -4,6 +4,8 @@ By using or possessing any copies of this library or its assets (including the i
 
 For information regarding potential license violations and eligibility for a bounty reward, please refer to the [Terms And Conditions Violation Bounty Reward Information](TermsAndConditionsViolationBountyRewardInformation.md).
 
+![DataPredictNucleusIconSmall](https://github.com/user-attachments/assets/e57d005b-b4a0-41d3-86cb-75999eab922a)
+
 | Version | Current Version Number |
 |---------|------------------------|
 | Release | 1.0                    |
