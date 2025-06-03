@@ -10,13 +10,13 @@ local CommandPayloadArrayStore = MemoryStoreService:GetSortedMap("CommandPayload
 local DataPredictLibraryLinker = script.DataPredictLibraryLinker.Value
 local TensorL2DLibraryLinker = script.TensorL2DLibraryLinker.Value
 
-local defaultUrl = "https://nucleus-api.datapredict.online"
+local defaultUrl = "http://localhost:4444"
 
 local defaultCommandPayloadArrayKey = "default"
 
 local defaultSyncTime = 30
 
-local defaultMaximumNumberOfSyncRetry = 3
+local defaultNumberOfSyncRetry = 3
 
 local defaultSyncRetryDelay = 3
 
@@ -42,7 +42,7 @@ function DataPredictNucleus.new(propertyTable: {})
 
 	local existingInstance = DataPredictNucleusInstancesArray[instanceId]
 
-	if (existingInstance) then return existingInstance end
+	if existingInstance then return existingInstance end
 
 	local NewDataPredictNucleusInstance = {}
 
@@ -54,19 +54,15 @@ function DataPredictNucleus.new(propertyTable: {})
 
 	NewDataPredictNucleusInstance.apiKey = propertyTable.apiKey
 
-	NewDataPredictNucleusInstance.encryptionKey = propertyTable.encryptionKey
-
 	NewDataPredictNucleusInstance.commandPayloadArrayKey = propertyTable.commandPayloadArrayKey or defaultCommandPayloadArrayKey
 
 	NewDataPredictNucleusInstance.syncTime = propertyTable.syncTime or defaultSyncTime
 
-	NewDataPredictNucleusInstance.maximumNumberOfSyncRetry = propertyTable.maximumNumberOfSyncRetry or defaultMaximumNumberOfSyncRetry
+	NewDataPredictNucleusInstance.numberOfSyncRetry = propertyTable.numberOfSyncRetry or defaultNumberOfSyncRetry
 
 	NewDataPredictNucleusInstance.syncRetryDelay = propertyTable.syncRetryDelay or defaultSyncRetryDelay
 
 	NewDataPredictNucleusInstance.commandPayloadArrayCacheDuration = propertyTable.commandPayloadArrayCacheDuration or defaultCommandPayloadArrayCacheDuration
-
-	if (not NewDataPredictNucleusInstance.encryptionKey) then warn("Without an encryption key, the data will not be encrypted. This means that the hackers can intercept the unencrypted data.") end
 
 	NewDataPredictNucleusInstance.commandFunctionDictionary = {}
 
@@ -98,13 +94,11 @@ function DataPredictNucleus:destroy()
 
 	self.apiKey = nil
 
-	self.encryptionKey = nil
-
 	self.commandPayloadArrayKey = nil
 
 	self.syncTime = nil
 
-	self.maximumNumberOfSyncRetry = nil
+	self.numberOfSyncRetry = nil
 
 	self.syncRetryDelay = nil
 
@@ -159,7 +153,7 @@ function DataPredictNucleus:getLogArray()
 
 end
 
-function DataPredictNucleus:clearLogArray()
+function DataPredictNucleus:clearAllLogs()
 
 	table.clear(self.logArray)
 
@@ -223,7 +217,7 @@ function DataPredictNucleus:fetchCommandPayloadArray()
 	local requestDictionary = { uuid = self.uuid, apiKey = self.apiKey }
 	local requestBody = HttpService:JSONEncode(requestDictionary)
 
-	for attempt = 1, self.maximumNumberOfSyncRetry, 1 do
+	for attempt = 1, self.numberOfSyncRetry, 1 do
 
 		local responseSuccess, responseBody = pcall(function()
 

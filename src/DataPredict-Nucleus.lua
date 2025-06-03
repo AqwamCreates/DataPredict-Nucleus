@@ -48,8 +48,6 @@ function DataPredictNucleus.new(propertyTable: {})
 
 	local apiKey: string = propertyTable.apiKey
 
-	local encryptionKey: string = propertyTable.encryptionKey
-
 	local commandPayloadArrayKey: string = propertyTable.commandPayloadArrayKey or defaultCommandPayloadArrayKey
 
 	local syncTime: number = propertyTable.syncTime or defaultSyncTime
@@ -59,8 +57,6 @@ function DataPredictNucleus.new(propertyTable: {})
 	local syncRetryDelay: number = propertyTable.syncRetryDelay or defaultSyncRetryDelay
 
 	local commandPayloadArrayCacheDuration: number = propertyTable.commandPayloadArrayCacheDuration or defaultCommandPayloadArrayCacheDuration
-
-	if (not encryptionKey) then warn("Without an encryption key, the data will not be encrypted. This means that the hackers can intercept the unencrypted data.") end
 
 	local commandFunctionDictionary = {}
 
@@ -91,8 +87,6 @@ function DataPredictNucleus.new(propertyTable: {})
 		uuid = nil
 
 		apiKey = nil
-
-		encryptionKey = nil
 
 		commandPayloadArrayKey = nil
 
