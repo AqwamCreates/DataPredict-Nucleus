@@ -10,7 +10,7 @@ local CommandPayloadArrayStore = MemoryStoreService:GetSortedMap("CommandPayload
 local DataPredictLibraryLinker = script.DataPredictLibraryLinker.Value
 local TensorL2DLibraryLinker = script.TensorL2DLibraryLinker.Value
 
-local defaultUrl = "http://localhost:4444"
+local defaultUrl = "https://nucleus-api.datapredict.online"
 
 local defaultCommandPayloadArrayKey = "default"
 

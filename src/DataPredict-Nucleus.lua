@@ -10,7 +10,7 @@ local CommandPayloadArrayStore = MemoryStoreService:GetSortedMap("CommandPayload
 local DataPredictLibraryLinker = script.DataPredictLibraryLinker.Value
 local TensorL2DLibraryLinker = script.TensorL2DLibraryLinker.Value
 
-local defaultUrl = "nucleus-api.datapredict.online"
+local defaultUrl = "https://nucleus-api.datapredict.online"
 
 local defaultCommandPayloadArrayKey = "default"
 
@@ -754,7 +754,7 @@ function DataPredictNucleus.new(propertyTable: {})
 	commandFunctionDictionary["gradientDescent"] = gradientDescent
 
 	commandFunctionDictionary["runCommand"] = runCommand
-
+	
 	--[[
 	
 	local function tableUnwrap(table, functionToRun, ...)
