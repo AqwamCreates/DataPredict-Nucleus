@@ -26,7 +26,7 @@
 
 6. **No Trademark Claims**:
 
-   * You **are strictly prohibited** from using any trademarks, service marks, or trade names associated with the Software (including, but not limited to, "DataPredict Agent") in any way that may suggest ownership, affiliation, or endorsement by the Licensor, **without prior, explicit, written consent**. Any attempt to claim such rights or use these marks in a misleading or confusing manner is **forbidden**.
+   * You **are strictly prohibited** from using any trademarks, service marks, or trade names associated with the Software (including, but not limited to, "DataPredict Nucleus") in any way that may suggest ownership, affiliation, or endorsement by the Licensor, **without prior, explicit, written consent**. Any attempt to claim such rights or use these marks in a misleading or confusing manner is **forbidden**.
 
 7. **Ownership and Credit**:
 
